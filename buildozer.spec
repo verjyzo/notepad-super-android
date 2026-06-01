@@ -12,10 +12,11 @@ android.permissions = READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
 
 orientation = portrait
 fullscreen = 0
-android.archs = arm64-v8a, armeabi-v7a
-android.allow_backup = True
 
-# PENTING: Otomatis menyetujui lisensi SDK Android untuk robot GitHub
+# FOKUS PADA HP MODERN (Mempercepat build & menghindari error arsitektur lama)
+android.archs = arm64-v8a
+
+android.allow_backup = True
 android.accept_sdk_license = True
 
 [buildozer]
