@@ -7,26 +7,28 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout kode
         uses: actions/checkout@v4
 
-      - name: Build dengan Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v3
-        id: buildozer
+      - name: Siapkan Python
+        uses: actions/setup-python@v5
         with:
-          command: buildozer android debug
-          repository_root: .
+          python-version: '3.10'
 
-      - name: Buat Rilis APK
-        uses: softprops/action-gh-release@v2
+      - name: Install Bahan Baku Buildozer
+        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          pip install --upgrade Cython==0.29.33 virtualenv buildozer
+
+      - name: Mulai Proses Build APK
+        run: buildozer android debug
+
+      - name: Unggah Hasil APK
+        uses: actions/upload-artifact@v4
         with:
-          files: bin/*.apk
-          tag_name: v1.0-${{ github.run_number }}
-          name: Notepad Super v1.0.${{ github.run_number }}
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: Notepad-Super-Android
+          path: bin/*.apk
